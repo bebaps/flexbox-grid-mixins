@@ -4,36 +4,48 @@
 
 .box {
   background-color: #2196f3;
-  color: #fff;
   height: 50px;
-  text-align: center;
 }
 
 .row {
-  @include grid();
+  @include grid(true, true);
 }
 
 .column {
-  @include column();
-}
-
-// Make some base columns
-@for $i from 1 through 12 {
-  .sm-col-#{$i} {
-    @include column($i);
+  &:nth-child(1) {
+    @include column(4);
   }
-}
-
-// Make some base columns for medium
-@for $i from 1 through 12 {
-  .md-col-#{$i} {
-    @include mq-column('md', $i);
+  &:nth-child(2) {
+    @include column(4);
   }
-}
-
-// Make some base columns for large
-@for $i from 1 through 12 {
-  .lg-col-#{$i} {
-    @include mq-column('lg', $i);
+  &:nth-child(3) {
+    @include column(4);
+  }
+  &:nth-child(4) {
+    @include column(4);
+  }
+  &:nth-child(5) {
+    @include column(4);
+  }
+  &:nth-child(6) {
+    @include column(4);
+  }
+  &:nth-child(7) {
+    @include column($grow: 1);
+  }
+  &:nth-child(8) {
+    @include column(8);
+  }
+  &:nth-child(9) {
+    @include column($grow: 1);
+  }
+  &:nth-child(10) {
+    @include column();
+  }
+  &:nth-child(11) {
+    @include column();
+  }
+  &:nth-child(12) {
+    @include column();
   }
 }

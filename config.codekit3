@@ -52,6 +52,16 @@
 		"oS": 3,
 		"uL": 1
 		},
+	"\/demo.css": {
+		"aP": 1,
+		"bl": 0,
+		"ft": 16,
+		"ma": 0,
+		"oA": 0,
+		"oAP": "\/demo-min.css",
+		"oF": 0,
+		"oS": 0
+		},
 	"\/demo.scss": {
 		"aP": 1,
 		"bl": 0,
@@ -62,7 +72,7 @@
 		"oA": 0,
 		"oAP": "\/demo.css",
 		"oF": 0,
-		"oS": 0,
+		"oS": 1,
 		"uL": 1
 		},
 	"\/index.html": {

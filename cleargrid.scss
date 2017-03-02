@@ -1,109 +1,65 @@
-/* -----------------------------------------------------------------------------
-  # Grid System
------------------------------------------------------------------------------ */
-// Set the grid defaults
-// -----------------------------------------------------------------------------
 $column-count: 12 !default;
 $gutter-size: 0.5rem !default;
-$medium: 40em; //640px
-$large: 64em; //1024px
+$wrapping-gutter: true !default;
+// Breakpoints at 640px and 1024px
+$breakpoints: (
+  md: 40em,
+  lg: 64em
+);
 
-// Find the width of 1 column, based upon the column count
+// Find the width of 1 column based upon the column count
 // -----------------------------------------------------------------------------
-@function find_column_width($columns: $column-count) {
+@function find-column-width($columns: $column-count) {
   $column-width: (100% / $columns);
   @return $column-width;
 }
 
-// Create a grid container to house the columns
+// Create a flex container to house the columns
 // -----------------------------------------------------------------------------
-@mixin grid($nested: false, $gutters: true) {
-  display: flex;
-  flex-wrap: wrap;
+@mixin grid($gutters: true, $wrap: false) {
   box-sizing: border-box;
-
-  @if $nested {
-    flex: 0 1 auto;
+  display: flex;
+  @if $wrap {
+    flex-wrap: wrap;
   }
 
-  @if $gutters {
-    > * {
+  > * {
+    box-sizing: border-box;
+    @if $gutters {
       padding-left: $gutter-size;
       padding-right: $gutter-size;
-      box-sizing: border-box;
+    }
+    @if $wrapping-gutter {
+      padding-top: $gutter-size;
+      padding-bottom: $gutter-size;
     }
   }
 }
 
 // Create a column of the grid
 // -----------------------------------------------------------------------------
-@mixin column($columns: 0, $md: null, $lg: null) {
-  $width: find_column_width();
-  $flex-basis: $width * $columns;
+@mixin column($columns: 1, $mq: null, $grow: 0, $shrink: 0) {
+  $base-width: find-column-width();
+  $column-width: $base-width * $columns;
 
-  // Setting $columns = 0 will set the column to be auto width and fill available space
-  @if ($columns == 0) {
-    flex: 1 0 0;
-    width: auto;
-  } @else {
-    flex: 0 0 $flex-basis;
-    min-width: $flex-basis;
+  @if ($mq == null) {
+    @if ($grow != 0) {
+      flex-grow: $grow;
+    }
+    flex-shrink: $shrink;
+    width: $column-width;
   }
 
-  // Set the column width on medium screens
-  @if ($md != null) {
-    @media screen and (min-width: $medium) {
-      $flex-basis: $width * $md;
-      @if ($md == 0) {
-        flex: 1 0 0;
-        width: auto;
-      } @else {
-        flex: 0 0 $flex-basis;
-        min-width: $flex-basis;
-      }
-    }
-  }
-
-  // Set the column width on large screens
-  @if ($lg != null) {
-    @media screen and (min-width: $large) {
-      $flex-basis: $width * $lg;
-      @if ($lg == 0) {
-        flex: 1 0 0;
-        width: auto;
-      } @else {
-        flex: 0 0 $flex-basis;
-        min-width: $flex-basis;
-      }
-    }
-  }
-}
-
-// Create a column for a specific breakpoint
-// Never needed if purely using grid as mixins
-// -----------------------------------------------------------------------------
-@mixin mq-column($breakpoint: 'md', $columns: 0) {
-  $width: find_column_width();
-  $flex-basis: $width * $columns;
-
-  @if ($breakpoint == 'lg') {
-    @media screen and (min-width: $large) {
-      @if ($columns == 0) {
-        flex: 1 0 0;
-        width: auto;
-      } @else {
-        flex: 0 0 $flex-basis;
-        min-width: $flex-basis;
-      }
-    }
-  } @else {
-    @media screen and (min-width: $medium) {
-      @if ($columns == 0) {
-        flex: 1 0 0;
-        width: auto;
-      } @else {
-        flex: 0 0 $flex-basis;
-        min-width: $flex-basis;
+  @if ($mq != null) {
+    @if (map-has-key($breakpoints, $mq)) {
+      @media (min-width: #{map-get($breakpoints, $mq)}) {
+        @if ($grow != 0) {
+          flex-grow: $grow;
+        }
+        @if ($shrink != 0) {
+          flex-shrink: $shrink;
+        }
+        width: $column-width;
       }
     }
   }
