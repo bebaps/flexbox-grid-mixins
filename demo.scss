@@ -1,0 +1,39 @@
+// Demo
+// -----------------------------------------------------------------------------
+@import "cleargrid.scss";
+
+.box {
+  background-color: #2196f3;
+  color: #fff;
+  height: 50px;
+  text-align: center;
+}
+
+.row {
+  @include grid();
+}
+
+.column {
+  @include column();
+}
+
+// Make some base columns
+@for $i from 1 through 12 {
+  .sm-col-#{$i} {
+    @include column($i);
+  }
+}
+
+// Make some base columns for medium
+@for $i from 1 through 12 {
+  .md-col-#{$i} {
+    @include mq-column('md', $i);
+  }
+}
+
+// Make some base columns for large
+@for $i from 1 through 12 {
+  .lg-col-#{$i} {
+    @include mq-column('lg', $i);
+  }
+}
