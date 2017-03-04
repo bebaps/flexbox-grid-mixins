@@ -1,65 +1,137 @@
+// Settings
+//
+// $column-count: Default column count
+// $gutter-size: Default gutter size
+// $wrapping-gutter: If columns wrap, should they have bottom padding
+// $breakpoints: Responsive breakpoints (use [em] units for best results)
+// -----------------------------------------------------------------------------
 $column-count: 12 !default;
 $gutter-size: 0.5rem !default;
 $wrapping-gutter: true !default;
-// Breakpoints at 640px and 1024px
 $breakpoints: (
-  md: 40em,
-  lg: 64em
+  medium: 40em,
+  large: 64em
 );
+
+// Strip units from any inputs
+// -----------------------------------------------------------------------------
+@function strip-unit($number) {
+  @if type-of($number) == number and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}
 
 // Find the width of 1 column based upon the column count
 // -----------------------------------------------------------------------------
-@function find-column-width($columns: $column-count) {
-  $column-width: (100% / $columns);
+@function find-column-width() {
+  $column-width: (100% / abs(strip-unit(round($column-count))));
   @return $column-width;
 }
 
 // Create a flex container to house the columns
+//
+// $nested: If this grid container is nested within a column
+// $gutters: If the columns should have gutters
+// $wrap: Should additional columns wrap to a new line
 // -----------------------------------------------------------------------------
-@mixin grid($gutters: true, $wrap: false) {
+@mixin grid($nested: false, $gutters: true, $wrap: false) {
+  // Ensure that any inputs are boolean
+  @if type-of($nested) != bool or
+  type-of($gutters) != bool or
+  type-of($wrap) != bool {
+    @error "Boolean value expected";
+  }
+
+  // Container styles
   box-sizing: border-box;
+  @if $nested {
+    margin-left: -$gutter-size;
+    margin-right: -$gutter-size;
+  }
   display: flex;
   @if $wrap {
     flex-wrap: wrap;
   }
 
+  // Base column styles
   > * {
     box-sizing: border-box;
     @if $gutters {
       padding-left: $gutter-size;
       padding-right: $gutter-size;
     }
-    @if $wrapping-gutter {
-      padding-top: $gutter-size;
-      padding-bottom: $gutter-size;
+    @if $wrap and $wrapping-gutter {
+      padding-bottom: $gutter-size * 2;
     }
+    flex-shrink: 0;
   }
 }
 
 // Create a column of the grid
+//
+// $columns: The number of columns to span (0 sets 'width: auto')
+// $md: The number of columns at the medium breakpoint
+// $lg: The number of columns at the large breakpoint
 // -----------------------------------------------------------------------------
-@mixin column($columns: 1, $mq: null, $grow: 0, $shrink: 0) {
-  $base-width: find-column-width();
-  $column-width: $base-width * $columns;
+@mixin column($columns: 0, $md: 0, $lg: 0) {
+  $one-column: find-column-width();
 
-  @if ($mq == null) {
-    @if ($grow != 0) {
-      flex-grow: $grow;
-    }
-    flex-shrink: $shrink;
+  // Ensure the input from $columns is a number
+  @if type-of($columns) != number {
+    @error "Column count must be a number between 0 and #{$column-count}";
+  } @elseif $columns == 0 {
+    width: auto;
+    flex-grow: 1;
+  } @else {
+    $column-width: $one-column * abs(strip-unit(round($columns)));
+
     width: $column-width;
   }
 
-  @if ($mq != null) {
-    @if (map-has-key($breakpoints, $mq)) {
-      @media (min-width: #{map-get($breakpoints, $mq)}) {
-        @if ($grow != 0) {
-          flex-grow: $grow;
+  // Ensure the input from $md is a number or a string
+  @if type-of($md) != number and type-of($md) != string {
+    @error "This value can only be a number between 0 and #{$column-count}, or 'auto'";
+  } @elseif type-of($md) == string and $md != auto {
+    @error "String must equal 'auto'";
+  } @else {
+    // Medium media query
+    @if $md != 0 {
+      @if $md == auto {
+        @media screen and (min-width: map-get($breakpoints, medium)) {
+          width: auto;
+          flex-grow: 1;
         }
-        @if ($shrink != 0) {
-          flex-shrink: $shrink;
+      } @else {
+        $md-column-width: $one-column * strip-unit(round($md));
+
+        @media screen and (min-width: map-get($breakpoints, medium)) {
+          width: $md-column-width;
         }
-        width: $column-width;
+      }
+    }
+  }
+
+  // Ensure the input from $lg is a number or a string
+  @if type-of($lg) != number and type-of($lg) != string {
+    @error "This value can only be a number between 0 and #{$column-count}, or 'auto'";
+  } @elseif type-of($lg) == string and $lg != auto {
+    @error "String must equal 'auto'";
+  } @else {
+    // Large media query
+    @if $lg != 0 {
+      @if $lg == auto {
+        @media screen and (min-width: map-get($breakpoints, large)) {
+          width: auto;
+          flex-grow: 1;
+        }
+      } @else {
+        $lg-column-width: $one-column * strip-unit(round($lg));
+
+        @media screen and (min-width: map-get($breakpoints, large)) {
+          width: $lg-column-width;
+        }
       }
     }
   }

@@ -7,37 +7,42 @@
   height: 50px;
 }
 
+.box2 {
+  background-color: red;
+  height: 50px;
+}
+
 .row {
-  @include grid(true, true);
+  @include grid($wrap: true);
 }
 
 .column {
   &:nth-child(1) {
-    @include column(4);
+    @include column(9, 6, auto);
   }
   &:nth-child(2) {
-    @include column(4);
+    @include column();
   }
   &:nth-child(3) {
-    @include column(4);
+    @include column(1, 4, auto);
   }
   &:nth-child(4) {
-    @include column(4);
+    @include column();
   }
   &:nth-child(5) {
-    @include column(4);
+    @include column();
   }
   &:nth-child(6) {
-    @include column(4);
+    @include column();
   }
   &:nth-child(7) {
-    @include column($grow: 1);
+    @include column();
   }
   &:nth-child(8) {
-    @include column(8);
+    @include column(11);
   }
   &:nth-child(9) {
-    @include column($grow: 1);
+    @include column();
   }
   &:nth-child(10) {
     @include column();
