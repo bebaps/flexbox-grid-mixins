@@ -39,7 +39,7 @@
     @include column();
   }
   &:nth-child(8) {
-    @include column(11);
+    @include column();
   }
   &:nth-child(9) {
     @include column();

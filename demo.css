@@ -82,8 +82,9 @@
 }
 
 .column:nth-child(8) {
-  -ms-flex-preferred-size: 91.6666666667%;
-      flex-basis: 91.6666666667%;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
 }
 
 .column:nth-child(9) {
