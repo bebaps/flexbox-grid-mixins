@@ -4,9 +4,12 @@
 
 .box {
   background-color: #2196f3;
-  color: #fff;
   height: 50px;
-  text-align: center;
+}
+
+.box2 {
+  background-color: red;
+  height: 50px;
 }
 
 .row {
@@ -14,26 +17,40 @@
 }
 
 .column {
-  @include column();
-}
-
-// Make some base columns
-@for $i from 1 through 12 {
-  .sm-col-#{$i} {
-    @include column($i);
+  &:nth-child(1) {
+    @include column(9, 6, auto);
   }
-}
-
-// Make some base columns for medium
-@for $i from 1 through 12 {
-  .md-col-#{$i} {
-    @include mq-column('md', $i);
+  &:nth-child(2) {
+    @include column();
   }
-}
-
-// Make some base columns for large
-@for $i from 1 through 12 {
-  .lg-col-#{$i} {
-    @include mq-column('lg', $i);
+  &:nth-child(3) {
+    @include column();
+  }
+  &:nth-child(4) {
+    @include column();
+  }
+  &:nth-child(5) {
+    @include column();
+  }
+  &:nth-child(6) {
+    @include column();
+  }
+  &:nth-child(7) {
+    @include column();
+  }
+  &:nth-child(8) {
+    @include column();
+  }
+  &:nth-child(9) {
+    @include column();
+  }
+  &:nth-child(10) {
+    @include column();
+  }
+  &:nth-child(11) {
+    @include column();
+  }
+  &:nth-child(12) {
+    @include column();
   }
 }
