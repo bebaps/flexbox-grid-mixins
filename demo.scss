@@ -13,7 +13,7 @@
 }
 
 .row {
-  @include grid($wrap: true);
+  @include grid();
 }
 
 .column {
@@ -24,7 +24,7 @@
     @include column();
   }
   &:nth-child(3) {
-    @include column(1, 4, auto);
+    @include column();
   }
   &:nth-child(4) {
     @include column();

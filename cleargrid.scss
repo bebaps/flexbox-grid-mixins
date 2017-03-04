@@ -3,11 +3,13 @@
 // $column-count: Default column count
 // $gutter-size: Default gutter size
 // $wrapping-gutter: If columns wrap, should they have bottom padding
+// $basis: What property to use for column widths, 'flex-basis' or 'width'
 // $breakpoints: Responsive breakpoints (use [em] units for best results)
 // -----------------------------------------------------------------------------
 $column-count: 12 !default;
 $gutter-size: 0.5rem !default;
 $wrapping-gutter: true !default;
+$basis: flex-basis !default;
 $breakpoints: (
   medium: 40em,
   large: 64em
@@ -71,9 +73,12 @@ $breakpoints: (
 
 // Create a column of the grid
 //
-// $columns: The number of columns to span (0 sets 'width: auto')
+// $columns: The number of columns to span
 // $md: The number of columns at the medium breakpoint
 // $lg: The number of columns at the large breakpoint
+//
+// NOTE: setting $columns to 0 is the same as [flex: 1 0 auto]
+// NOTE: setting $md or $lg to 0 turns off the respective breakpoint
 // -----------------------------------------------------------------------------
 @mixin column($columns: 0, $md: 0, $lg: 0) {
   $one-column: find-column-width();
@@ -82,12 +87,11 @@ $breakpoints: (
   @if type-of($columns) != number {
     @error "Column count must be a number between 0 and #{$column-count}";
   } @elseif $columns == 0 {
-    width: auto;
     flex-grow: 1;
   } @else {
     $column-width: $one-column * abs(strip-unit(round($columns)));
 
-    width: $column-width;
+    #{$basis}: $column-width;
   }
 
   // Ensure the input from $md is a number or a string
@@ -100,14 +104,14 @@ $breakpoints: (
     @if $md != 0 {
       @if $md == auto {
         @media screen and (min-width: map-get($breakpoints, medium)) {
-          width: auto;
+          #{$basis}: auto;
           flex-grow: 1;
         }
       } @else {
         $md-column-width: $one-column * strip-unit(round($md));
 
         @media screen and (min-width: map-get($breakpoints, medium)) {
-          width: $md-column-width;
+          #{$basis}: $md-column-width;
         }
       }
     }
@@ -123,14 +127,14 @@ $breakpoints: (
     @if $lg != 0 {
       @if $lg == auto {
         @media screen and (min-width: map-get($breakpoints, large)) {
-          width: auto;
+          #{$basis}: auto;
           flex-grow: 1;
         }
       } @else {
         $lg-column-width: $one-column * strip-unit(round($lg));
 
         @media screen and (min-width: map-get($breakpoints, large)) {
-          width: $lg-column-width;
+          #{$basis}: $lg-column-width;
         }
       }
     }
