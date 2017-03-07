@@ -37,3 +37,7 @@ jspm_packages
 .node_repl_history
 /.idea
 /.DS_Store
+/index.html
+/config.codekit3
+/demo.css
+/demo.scss
