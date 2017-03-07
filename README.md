@@ -1,4 +1,4 @@
-# Sass Flexbox Mixins
+# Flexbox Grid Mixins
 A set of Sass mixins for Flexbox
 
 ### About
